@@ -118,7 +118,7 @@ export default function ForecastPage() {
           const entryTime = new Date(entry.dt * 1000).getHours();
           return entryDate === date && entryTime >= 6;
         });
-      });
+      });   
 
 
     if (isLoading) {
@@ -234,15 +234,12 @@ export default function ForecastPage() {
                                 </Container>
                                 <Container className="bg-yellow-300/80  px-6 gap-4 justify-between overflow-x-auto">
                                     <WeatherDetails
-                                        visability={metersToKilometers(
-                                            firstData?.visibility ?? 10000
-                                        )}
-                                        airPressure={`${firstData?.main.pressure} hPa`}
-                                        humidity={`${firstData?.main.humidity}%`}
-                                        sunrise={format(data?.city.sunrise ?? 1702949452, "H:mm")}
-                                        // sunrise={}
-                                        sunset={format(data?.city.sunset ?? 1702517657, "H:mm")}
-                                        windSpeed={convertWindSpeed(firstData?.wind.speed ?? 1.64)}
+                                       visibility={metersToKilometers(firstData?.visibility ?? 10000)}
+                                       airPressure={`${firstData?.main.pressure} hPa`}
+                                       humidity={`${firstData?.main.humidity}%`}
+                                       sunrise={format(fromUnixTime(data?.city.sunrise ?? 1702949452), "H:mm")}
+                                       sunset={format(fromUnixTime(data?.city.sunset ?? 1702517657), "H:mm")}
+                                       windSpeed={convertWindSpeed(firstData?.wind.speed ?? 1.64)}
                                     />
                                 </Container>
                                 {/* right  */}
@@ -273,7 +270,7 @@ export default function ForecastPage() {
                                         fromUnixTime(data?.city.sunset ?? 1702517657),
                                         "H:mm"
                                     )}
-                                    visability={`${metersToKilometers(d?.visibility ?? 10000)} `}
+                                    visibility={`${metersToKilometers(d?.visibility ?? 10000)} `}
                                     windSpeed={`${convertWindSpeed(d?.wind.speed ?? 1.64)} `}
                                 />
                             ))}

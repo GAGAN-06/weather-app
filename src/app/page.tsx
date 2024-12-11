@@ -22,7 +22,7 @@ export default function Home() {
       if (!isPostalCode && value.length >= 3) {
         try {
           const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}`
+            `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${"95cb7270654c7f74be35b5f94abf2ff9"}`
           );
           const suggestions = response.data.list.map((item: any) => item.name);
           setSuggestions(suggestions);
