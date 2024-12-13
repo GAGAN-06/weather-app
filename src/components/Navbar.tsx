@@ -11,7 +11,7 @@ import { useAtom } from "jotai";
 
 type Props = { location?: string };
 
-const API_KEY = "966d84a2987f9d273ec5fb22fa01fb47";
+const API_KEY = "95cb7270654c7f74be35b5f94abf2ff9";
 
 export default function Navbar({ location }: Props) {
   const [city, setCity] = useState("");

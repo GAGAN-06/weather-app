@@ -1,12 +1,10 @@
 'use client'
-
 import { useRouter } from 'next/navigation'
 import SearchBox from "@/components/SearchBox";
-import { useState, useCallback } from "react";
-import axios from "axios";
-import { debounce } from 'lodash';
+import { useState } from "react";
 import { useAtom } from 'jotai';
 import { placeAtom } from './atom';
+import { fetchCitySuggestions } from './api/weatheractions';
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,34 +15,16 @@ export default function Home() {
   const [isPostalCode, setIsPostalCode] = useState(false);
   const router = useRouter();
 
-  const debouncedFetchSuggestions = useCallback(
-    debounce(async (value: string) => {
-      if (!isPostalCode && value.length >= 3) {
-        try {
-          const response = await axios.get(
-            `https://api.openweathermap.org/data/2.5/find?q=${value}&appid=${"95cb7270654c7f74be35b5f94abf2ff9"}`
-          );
-          const suggestions = response.data.list.map((item: any) => item.name);
-          setSuggestions(suggestions);
-          setError("");
-          setShowSuggestions(true);
-        } catch (error) {
-          setSuggestions([]);
-          setShowSuggestions(false);
-        }
-      }
-    }, 500),
-    [isPostalCode]
-  );
-
-  const handleInputChange = (value: string) => {
+  const handleInputChange = async (value: string) => {
     setSearchTerm(value);
-    // Check if input matches postal code format (adjust regex for your country's format)
     const isPostal = /^\d{5,6}$/.test(value);
     setIsPostalCode(isPostal);
     
-    if (!isPostal) {
-      debouncedFetchSuggestions(value);
+    if (!isPostal && value.length >= 3) {
+      const suggestions = await fetchCitySuggestions(value);
+      setSuggestions(suggestions);
+      setShowSuggestions(true);
+      setError(suggestions.length === 0 ? "Location not found" : "");
     } else {
       setSuggestions([]);
       setShowSuggestions(false);
